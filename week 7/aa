@@ -1,0 +1,150 @@
+struct Node* leafDelete(struct Node* root) 
+{ 
+    if (root == NULL) 
+        return NULL; 
+    if (root->left == NULL && root->right == NULL) { 
+        free(root); 
+        return NULL; 
+    } 
+  
+    // Else recursively delete in left and right 
+    // subtrees. 
+    root->left = leafDelete(root->left); 
+    root->right = leafDelete(root->right); 
+  
+    return root; 
+} 
+
+void removeLeaves( Node * & t )
+{
+if( t == NULL || ( t->left == NULL && t->right == NULL ) )
+{
+t = NULL;
+return;
+}
+removeLeaves( t->left );
+removeLeaves( t->right );
+}
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node {
+  int key;
+  struct node *left, *right;
+};
+
+struct node *newNode(int item) {
+  struct node *temp = (struct node *)malloc(sizeof(struct node));
+  temp->key = item;
+  temp->left = NULL;
+  temp->right = NULL;
+  return temp;
+}
+
+struct node *insert(struct node *node, int key) {
+ 
+  if (node == NULL) return newNode(key);
+
+  
+  if (key < node->key)
+    node->left = insert(node->left, key);
+  else
+    node->right = insert(node->right, key);
+
+  return node;
+}
+
+
+void display(struct node *root) {
+ 
+  if (root != NULL) {
+    
+    display(root->left);
+    printf("%d -> ", root->key);     
+    display(root->right);
+  }
+  
+}
+
+struct node *removeleaf(struct node *root)
+{
+    if(root == NULL)  
+    {  
+        return NULL;
+    }
+    if((root->left == NULL) && (root->right == NULL))
+    {
+        free(root);
+        return NULL;
+    }
+
+    root->left = removeleaf(root->left);
+    root->right = removeleaf(root->right);
+
+    return root;
+}
+
+  struct node *head = NULL;
+  int opt ;
+  printf("\nENTER THE OPTION :");
+  int data ;
+             printf("\n1 to insert \n");
+            printf("2 to in_order \n");
+            printf("\n 3 to leaf delete delete\n");
+
+    do
+        {
+
+            printf("enter the options or 0 to quit :");
+            scanf("%d",&opt);
+            switch(opt){
+                case 1 :
+                    printf("enter the data :");
+                    scanf("%d",&data);
+                    head = insert(head,data);
+                    break ;
+                case 2 :
+                    printf("\n\n");
+                    inorder(head);
+                    break ;
+                case 3 :
+                    head = leafDelete(head);
+                    break ;
+                case 0 :
+                    printf("exiting the program\n");
+                    break ;
+                default :
+                    printf("enter valid options\n");
+                    break ;
+
+            }
+            
+        } while (opt!=0);
+        return 0 ;
+
+int main()
+{
+    int data;
+
+    struct node *root = NULL;
+    printf("Enter the numeber (-1 to exit) :\n");
+    scanf("%d",&data);
+    root=insert(root,data);
+    while(data!=0)
+    {
+        scanf("%d",&data);
+        if(data== -1)
+            break;
+        
+        insert(root,data);
+        
+    }
+    printf("Displayng all the element in a tree\n");
+    display(root);
+    removeleaf(root);
+    printf("\nAfter removing the node\n");
+    display(root);
+
+    return 0;
+    
+}
